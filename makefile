@@ -15,8 +15,6 @@ $(RELEASE_PREF)/$(TARGET): $(OBJ)
 $(OBJ_PREF)/%.o: $(SRC_PREF)/%.c
 	gcc -c $< -o $@
 
-#я не знаю как тут нормально экранировать слеши для windows
-
 clean:
 	del $(RELEASE_PREF)\\*.exe
 	del $(OBJ_PREF)\\*.o
