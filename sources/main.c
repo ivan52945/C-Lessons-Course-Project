@@ -11,34 +11,32 @@ int main(int argc, char* argv []) {
     if(in.stat == clc) {
         t_record* month_p_arr[12] = { 0 };
 
-        printf("read stats from file %s\n", in.path);
-
-        unsigned long max_size = n_records_in_csv(in.path);
-
-        t_record* a = malloc(sizeof(t_record) * max_size);
-
-        unsigned long n_rec = read_file_csv(in.path, a, month_p_arr);
+        t_record_vect a = read_file_csv(in.path, month_p_arr);
 
         if(in.month) {
-            int t_average = t_average_mount(n_rec, a, in.month, month_p_arr);
-            int t_min = t_min_month(n_rec, a, in.month, month_p_arr);
-            int t_max = t_max_month(n_rec, a, in.month, month_p_arr);
+            if(month_p_arr[in.month]) {
+                int t_average = t_average_mount(a.n, a.vect, in.month, month_p_arr);
+                int t_min = t_min_month(a.n, a.vect, in.month, month_p_arr);
+                int t_max = t_max_month(a.n, a.vect, in.month, month_p_arr);
 
-            printf("average temperature in month %d is %d degrees C\n", in.month, t_average);
-            printf("minimal temperature in month %d is %d degrees C\n", in.month, t_min);
-            printf("maximal temperature in month %d is %d degrees C\n", in.month, t_max);
+                printf("average temperature in month %d is %d degrees C\n", in.month, t_average);
+                printf("minimal temperature in month %d is %d degrees C\n", in.month, t_min);
+                printf("maximal temperature in month %d is %d degrees C\n", in.month, t_max);
+            }
+            else
+                printf("There are no data for month %d", in.month);
         }
         else {
-            int t_average = t_average_year(n_rec, a);
-            int t_min = t_min_year(n_rec, a);
-            int t_max = t_max_year(n_rec, a);
+            int t_average = t_average_year(a.n, a.vect);
+            int t_min = t_min_year(a.n, a.vect);
+            int t_max = t_max_year(a.n, a.vect);
 
             printf("average temperature in year is %d degrees C\n", t_average);
             printf("minimal temperature in year is %d degrees C\n", t_min);
             printf("maximal temperature in year is %d degrees C\n", t_max);
         }
 
-        free(a);
+        free(a.vect);
     }
     else
         print_help();

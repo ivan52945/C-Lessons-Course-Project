@@ -27,12 +27,20 @@ int n_records_in_csv(char in []) {
     return size;
 }
 
-int read_file_csv(char in [], t_record a [], t_record* month_p []) {
-    int n = 0;
+t_record_vect read_file_csv(char in [], t_record* month_p []) {
+    t_record_vect out;
+
+    out.n = 0;
     char s[30];
     FILE* f = open_file(in, "r");
     t_record tmp;
     int n_correct;
+
+    unsigned long max_size = n_records_in_csv(in);
+
+    out.vect = malloc(sizeof(t_record) * max_size);
+
+    printf("read stats from file %s\n", in);
 
     for(int i = 0; fscanf(f, "%[^\n]\n", s) != EOF; i++) {
 
@@ -40,15 +48,15 @@ int read_file_csv(char in [], t_record a [], t_record* month_p []) {
 
         if(n_correct == 6 && (tmp.month > 0 && tmp.month < 13)) {
             if(!month_p[tmp.month - 1]) {
-                month_p[tmp.month - 1] = a + n;
+                month_p[tmp.month - 1] = out.vect + out.n;
             }
-            a[n++] = tmp;
+            out.vect[out.n++] = tmp;
         }
         else
             printf("Wrong data in record %d: %s\n", i + 1, s);
     }
 
-    return n;
-
     fclose(f);
+
+    return out;
 }
