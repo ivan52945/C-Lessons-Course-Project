@@ -2,7 +2,7 @@
 
 typedef struct {
     unsigned short year;
-    unsigned char mounth;
+    unsigned char month;
     unsigned char day;
     unsigned char hour;
     unsigned char minute;
