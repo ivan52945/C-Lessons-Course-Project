@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../headers/t_record_type.h"
-#include "../headers/files.h"
+#include "../headers/files_api.h"
 
 FILE* open_file(char name [], char format []) {
     FILE* f = fopen(name, format);

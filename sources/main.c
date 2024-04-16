@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../headers/temp_api.h"
 #include "../headers/interface.h"
-#include "../headers/files.h"
+#include "../headers/files_api.h"
 
 int main(int argc, char* argv []) {
     args_res in = read_args(argc, argv);
@@ -23,18 +23,18 @@ int main(int argc, char* argv []) {
             int t_min = t_min_mounth(n_rec, a, in.month, month);
             int t_max = t_max_mounth(n_rec, a, in.month, month);
 
-            printf("average temperature in month %d is %d\n", in.month, t_average);
-            printf("minimal temperature in month %d is %d\n", in.month, t_min);
-            printf("maximal temperature in month %d is %d\n", in.month, t_max);
+            printf("average temperature in month %d is %d℃\n", in.month, t_average);
+            printf("minimal temperature in month %d is %d℃\n", in.month, t_min);
+            printf("maximal temperature in month %d is %d℃\n", in.month, t_max);
         }
         else {
             int t_average = t_average_year(n_rec, a);
             int t_min = t_min_year(n_rec, a);
             int t_max = t_max_year(n_rec, a);
 
-            printf("average temperature in year is %d\n", t_average);
-            printf("minimal temperature in year is %d\n", t_min);
-            printf("maximal temperature in year is %d\n", t_max);
+            printf("average temperature in year is %d℃\n", t_average);
+            printf("minimal temperature in year is %d℃\n", t_min);
+            printf("maximal temperature in year is %d℃\n", t_max);
         }
     }
     else
