@@ -1,5 +1,7 @@
 TARGET = course-project
 
+FLAGS = -Wall
+
 RELEASE_PREF = release
 SRC_PREF = sources
 OBJ_PREF = objects
@@ -10,10 +12,10 @@ OBJ = $(patsubst $(SRC_PREF)/%.c, $(OBJ_PREF)/%.o, $(SRC))
 all: $(RELEASE_PREF)/$(TARGET)
 
 $(RELEASE_PREF)/$(TARGET): $(OBJ)
-	gcc $(OBJ) -o $(RELEASE_PREF)/$(TARGET)
+	gcc $(FLAGS) $(OBJ) -o $(RELEASE_PREF)/$(TARGET)
 
 $(OBJ_PREF)/%.o: $(SRC_PREF)/%.c
-	gcc -c $< -o $@
+	gcc $(FLAGS) -c $< -o $@
 
 clean:
 	del $(RELEASE_PREF)\\*.exe
