@@ -1,6 +1,5 @@
 #pragma once
 #include "t_record_type.h"
-#include <stdio.h>
 
 FILE* open_file(char name [], char format []);
 

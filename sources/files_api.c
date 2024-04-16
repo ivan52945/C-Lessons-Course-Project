@@ -27,26 +27,25 @@ int n_records_in_csv(char in []) {
     return size;
 }
 
-int read_file_csv(char in [], t_record a [], t_record* month_start []) {
+int read_file_csv(char in [], t_record a [], t_record* month_p []) {
     int n = 0;
     char s[30];
     FILE* f = open_file(in, "r");
-    int readed;
     t_record tmp;
     int n_correct;
 
-    while((readed = fscanf(f, "%[^\n]\n", s)) != EOF) {
+    for(int i = 0; fscanf(f, "%[^\n]\n", s) != EOF; i++) {
 
-        n_correct = sscanf(s, "%hu;%hhu;%hhu;%hhu;%hhu;%hhd", &(tmp.year), &(tmp.mounth), &(tmp.day), &(tmp.hour), &(tmp.minute), &(tmp.temp));
+        n_correct = sscanf(s, "%hu;%hhu;%hhu;%hhu;%hhu;%hhd", &(tmp.year), &(tmp.month), &(tmp.day), &(tmp.hour), &(tmp.minute), &(tmp.temp));
 
-        if(n_correct == 6) {
-            if((tmp.mounth > 0 && tmp.mounth < 13) && !month_start[tmp.mounth - 1]) {
-                month_start[tmp.mounth - 1] = a + n;
+        if(n_correct == 6 && (tmp.month > 0 && tmp.month < 13)) {
+            if(!month_p[tmp.month - 1]) {
+                month_p[tmp.month - 1] = a + n;
             }
             a[n++] = tmp;
         }
         else
-            printf("Wrong data in record %d: %s\n", n + 1, s);
+            printf("Wrong data in record %d: %s\n", i + 1, s);
     }
 
     return n;
