@@ -2,7 +2,6 @@
 
 typedef enum {
     err,
-    clc_m,
     clc,
     help,
 } status;
@@ -13,6 +12,6 @@ typedef struct {
     status stat;
 } args_res;
 
-void read_args(int argc, char* argv [], args_res* out);
+args_res read_args(int argc, char* argv []);
 
 void print_help(void);

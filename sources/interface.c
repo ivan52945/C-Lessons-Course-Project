@@ -4,7 +4,8 @@
 #include <string.h>
 #include <stdio.h>
 
-void read_args(int argc, char* argv [], args_res* out) {
+args_res read_args(int argc, char* argv []) {
+    args_res out;
     int err_c = 0;
     int hlp_c = 0;
     int mnth_c = 0;
@@ -19,11 +20,11 @@ void read_args(int argc, char* argv [], args_res* out) {
                 break;
             case 'f':
                 clc_c = 1;
-                strcpy(out->path, optarg);
+                strcpy(out.path, optarg);
                 break;
             case 'm':
                 mnth_c = 1;
-                out->month = atoi(optarg);
+                out.month = atoi(optarg);
                 break;
             case '?':
                 puts("useless\n");
@@ -33,26 +34,28 @@ void read_args(int argc, char* argv [], args_res* out) {
     }
     // checking correct args
     if(err_c) {
-        out->stat = err;
-        return;
+        out.stat = err;
+        return out;
     }
     else if(hlp_c && (mnth_c || clc_c)) {
-        out->stat = err;
+        out.stat = err;
         printf("Error: arg help must be without other args\n");
-        return;
+        return out;
     }
     else if(mnth_c && !clc_c) {
-        out->stat = err;
+        out.stat = err;
         printf("Error: arg file is missed\n");
-        return;
+        return out;
     }
     // input status to output structure
-    if(hlp_c)
-        out->stat = help;
-    else if(mnth_c)
-        out->stat = clc_m;
+    if(!hlp_c) {
+        out.stat = clc;
+        out.month = mnth_c;
+    }
+
     else
-        out->stat = clc;
+        out.stat = help;
+    return out;
 }
 
 void print_help(void) {
