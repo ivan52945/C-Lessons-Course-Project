@@ -11,7 +11,7 @@ int main(int argc, char* argv []) {
     if(in.stat == clc) {
         t_record* month_p_arr[12] = { 0 };
 
-        t_record_vect a = read_file_csv(in.path, month_p_arr);
+        t_record_vect a = get_vect_from_file_csv(in.path, month_p_arr);
 
         if(in.month) {
             if(month_p_arr[in.month]) {

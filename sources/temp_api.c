@@ -1,7 +1,7 @@
-
-#include "../headers/temp_api.h"
 #include <math.h>
 #include <stdio.h>
+
+#include "../headers/temp_api.h"
 
 char t_average(unsigned long n_rec, t_record a []) {
     long long sum = 0;
@@ -98,3 +98,4 @@ char t_min_year(unsigned long n_rec, t_record a []) {
 char t_max_year(unsigned long n_rec, t_record a []) {
     return t_max(n_rec, a);
 }
+
