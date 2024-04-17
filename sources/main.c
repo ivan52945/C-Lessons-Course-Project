@@ -13,12 +13,10 @@ int main(int argc, char* argv []) {
 
         t_record_vect a = get_vect_from_file_csv(in.path, month_p_arr);
 
-        if(in.month) {
+        if(in.month)
             print_month_statistics(a.n, a.vect, in.month, month_p_arr);
-        }
-        else {
+        else
             print_year_statistics(a.n, a.vect);
-        }
 
         free(a.vect);
     }

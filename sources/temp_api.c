@@ -7,9 +7,8 @@ char t_average(unsigned long n_rec, t_record a []) {
     long long sum = 0;
     char average;
 
-    for(int i = 0; i < n_rec; i++) {
+    for(int i = 0; i < n_rec; i++)
         sum += a[i].temp;
-    }
 
     average = round(sum * 1.0 / n_rec);
 
@@ -19,9 +18,8 @@ char t_average(unsigned long n_rec, t_record a []) {
 char t_min(unsigned long n_rec, t_record a []) {
     char min = a[0].temp;
 
-    for(int i = 1; i < n_rec; i++) {
+    for(int i = 1; i < n_rec; i++)
         min = (min > a[i].temp) ? a[i].temp : min;
-    }
 
     return min;
 }
@@ -29,9 +27,8 @@ char t_min(unsigned long n_rec, t_record a []) {
 char t_max(unsigned long n_rec, t_record a []) {
     char max = a[0].temp;
 
-    for(int i = 1; i < n_rec; i++) {
+    for(int i = 1; i < n_rec; i++)
         max = (max < a[i].temp) ? a[i].temp : max;
-    }
 
     return max;
 }
