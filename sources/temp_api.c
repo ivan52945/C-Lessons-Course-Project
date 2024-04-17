@@ -99,3 +99,26 @@ char t_max_year(unsigned long n_rec, t_record a []) {
     return t_max(n_rec, a);
 }
 
+void print_month_statistics(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
+    if(month_p_arr[month]) {
+        int t_average = t_average_mount(n_rec, a, month, month_p_arr);
+        int t_min = t_min_month(n_rec, a, month, month_p_arr);
+        int t_max = t_max_month(n_rec, a, month, month_p_arr);
+
+        printf("average temperature in month %d is %d degrees C\n", month, t_average);
+        printf("minimal temperature in month %d is %d degrees C\n", month, t_min);
+        printf("maximal temperature in month %d is %d degrees C\n", month, t_max);
+    }
+    else
+        printf("There are no data for month %d", month);
+}
+
+void print_year_statistics(unsigned long n_rec, t_record a []) {
+    int t_average = t_average_year(n_rec, a);
+    int t_min = t_min_year(n_rec, a);
+    int t_max = t_max_year(n_rec, a);
+
+    printf("average temperature in year is %d degrees C\n", t_average);
+    printf("minimal temperature in year is %d degrees C\n", t_min);
+    printf("maximal temperature in year is %d degrees C\n", t_max);
+}

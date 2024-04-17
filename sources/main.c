@@ -14,26 +14,10 @@ int main(int argc, char* argv []) {
         t_record_vect a = get_vect_from_file_csv(in.path, month_p_arr);
 
         if(in.month) {
-            if(month_p_arr[in.month]) {
-                int t_average = t_average_mount(a.n, a.vect, in.month, month_p_arr);
-                int t_min = t_min_month(a.n, a.vect, in.month, month_p_arr);
-                int t_max = t_max_month(a.n, a.vect, in.month, month_p_arr);
-
-                printf("average temperature in month %d is %d degrees C\n", in.month, t_average);
-                printf("minimal temperature in month %d is %d degrees C\n", in.month, t_min);
-                printf("maximal temperature in month %d is %d degrees C\n", in.month, t_max);
-            }
-            else
-                printf("There are no data for month %d", in.month);
+            print_month_statistics(a.n, a.vect, in.month, month_p_arr);
         }
         else {
-            int t_average = t_average_year(a.n, a.vect);
-            int t_min = t_min_year(a.n, a.vect);
-            int t_max = t_max_year(a.n, a.vect);
-
-            printf("average temperature in year is %d degrees C\n", t_average);
-            printf("minimal temperature in year is %d degrees C\n", t_min);
-            printf("maximal temperature in year is %d degrees C\n", t_max);
+            print_year_statistics(a.n, a.vect);
         }
 
         free(a.vect);
