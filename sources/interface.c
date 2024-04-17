@@ -1,8 +1,9 @@
-#include "../headers/interface.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "../headers/interface.h"
 
 args_res read_args(int argc, char* argv []) {
 

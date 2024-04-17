@@ -1,7 +1,7 @@
-
-#include "../headers/temp_api.h"
 #include <math.h>
 #include <stdio.h>
+
+#include "../headers/temp_api.h"
 
 char t_average(unsigned long n_rec, t_record a []) {
     long long sum = 0;
@@ -37,31 +37,54 @@ char t_max(unsigned long n_rec, t_record a []) {
 }
 
 unsigned long n_needed_rect(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    return (month < 12) ? month_p_arr[month] - month_p_arr[month - 1] : n_rec - (month_p_arr[month - 1] - a);
+    if(month_p_arr[month - 1]) {
+        int i;
+
+        for(i = month; i < 12 && !month_p_arr[i]; i++) { }
+
+        if(i < 11 || (i == 11 && month_p_arr[i]))
+            return month_p_arr[month] - month_p_arr[month - 1];
+        else
+            return n_rec - (month_p_arr[month - 1] - a);
+    }
+    else
+        return 0;
 }
 
 char t_average_mount(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
     t_record* start = month_p_arr[month - 1];
 
-    int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
+    if(start) {
+        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
 
-    return  t_average(n_needed_rec_out, start);
+        return  t_average(n_needed_rec_out, start);
+    }
+    else
+        return -120;
 }
 
 char t_min_month(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
     t_record* start = month_p_arr[month - 1];
 
-    int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
+    if(start) {
+        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
 
-    return t_min(n_needed_rec_out, start);
+        return t_min(n_needed_rec_out, start);
+    }
+    else
+        return -120;
 }
 
 char t_max_month(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
     t_record* start = month_p_arr[month - 1];
 
-    int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
+    if(start) {
+        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
 
-    return t_max(n_needed_rec_out, start);
+        return t_max(n_needed_rec_out, start);
+    }
+    else
+        return -120;
 }
 
 char t_average_year(unsigned long n_rec, t_record a []) {
@@ -74,4 +97,28 @@ char t_min_year(unsigned long n_rec, t_record a []) {
 
 char t_max_year(unsigned long n_rec, t_record a []) {
     return t_max(n_rec, a);
+}
+
+void print_month_statistics(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
+    if(month_p_arr[month]) {
+        int t_average = t_average_mount(n_rec, a, month, month_p_arr);
+        int t_min = t_min_month(n_rec, a, month, month_p_arr);
+        int t_max = t_max_month(n_rec, a, month, month_p_arr);
+
+        printf("average temperature in month %d is %d degrees C\n", month, t_average);
+        printf("minimal temperature in month %d is %d degrees C\n", month, t_min);
+        printf("maximal temperature in month %d is %d degrees C\n", month, t_max);
+    }
+    else
+        printf("There are no data for month %d", month);
+}
+
+void print_year_statistics(unsigned long n_rec, t_record a []) {
+    int t_average = t_average_year(n_rec, a);
+    int t_min = t_min_year(n_rec, a);
+    int t_max = t_max_year(n_rec, a);
+
+    printf("average temperature in year is %d degrees C\n", t_average);
+    printf("minimal temperature in year is %d degrees C\n", t_min);
+    printf("maximal temperature in year is %d degrees C\n", t_max);
 }
