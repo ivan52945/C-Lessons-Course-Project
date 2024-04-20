@@ -7,19 +7,18 @@ char t_average(unsigned long n_rec, t_record a []) {
     long long sum = 0;
     char average;
 
-    for(int i = 0; i < n_rec; i++) {
+    for(int i = 0; i < n_rec; i++)
         sum += a[i].temp;
-    }
 
-    average = round(sum * 1.0 / n_rec);
+    average = (n_rec > 0) ? round(sum * 1.0 / n_rec) : -120;
 
     return average;
 }
 
 char t_min(unsigned long n_rec, t_record a []) {
-    char min = a[0].temp;
+    char min = 120;
 
-    for(int i = 1; i < n_rec; i++) {
+    for(int i = 0; i < n_rec; i++) {
         min = (min > a[i].temp) ? a[i].temp : min;
     }
 
@@ -27,62 +26,39 @@ char t_min(unsigned long n_rec, t_record a []) {
 }
 
 char t_max(unsigned long n_rec, t_record a []) {
-    char max = a[0].temp;
+    char max = -120;
 
-    for(int i = 1; i < n_rec; i++) {
+    for(int i = 0; i < n_rec; i++)
         max = (max < a[i].temp) ? a[i].temp : max;
-    }
 
     return max;
 }
 
-unsigned long n_needed_rect(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    if(month_p_arr[month - 1]) {
-        int i;
 
-        for(i = month; i < 12 && !month_p_arr[i]; i++) { }
 
-        if(i < 11 || (i == 11 && month_p_arr[i]))
-            return month_p_arr[month] - month_p_arr[month - 1];
-        else
-            return n_rec - (month_p_arr[month - 1] - a);
-    }
-    else
-        return 0;
-}
+char t_average_mount(unsigned long n_rec, t_record a [], int month, t_record_vect month_vect []) {
+    t_record_vect mnt_s = month_vect[month - 1];
 
-char t_average_mount(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    t_record* start = month_p_arr[month - 1];
-
-    if(start) {
-        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
-
-        return  t_average(n_needed_rec_out, start);
-    }
+    if(mnt_s.n)
+        return  t_average(mnt_s.n, mnt_s.vect);
     else
         return -120;
 }
 
-char t_min_month(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    t_record* start = month_p_arr[month - 1];
+char t_min_month(unsigned long n_rec, t_record a [], int month, t_record_vect month_vect []) {
+    t_record_vect mnt_s = month_vect[month - 1];
 
-    if(start) {
-        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
-
-        return t_min(n_needed_rec_out, start);
-    }
+    if(mnt_s.n)
+        return t_min(mnt_s.n, mnt_s.vect);
     else
         return -120;
 }
 
-char t_max_month(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    t_record* start = month_p_arr[month - 1];
+char t_max_month(unsigned long n_rec, t_record a [], int month, t_record_vect month_vect []) {
+    t_record_vect mnt_s = month_vect[month - 1];
 
-    if(start) {
-        int n_needed_rec_out = n_needed_rect(n_rec, a, month, month_p_arr);
-
-        return t_max(n_needed_rec_out, start);
-    }
+    if(mnt_s.n)
+        return t_max(mnt_s.n, mnt_s.vect);
     else
         return -120;
 }
@@ -99,21 +75,29 @@ char t_max_year(unsigned long n_rec, t_record a []) {
     return t_max(n_rec, a);
 }
 
-void print_month_statistics(unsigned long n_rec, t_record a [], int month, t_record* month_p_arr []) {
-    if(month_p_arr[month]) {
-        int t_average = t_average_mount(n_rec, a, month, month_p_arr);
-        int t_min = t_min_month(n_rec, a, month, month_p_arr);
-        int t_max = t_max_month(n_rec, a, month, month_p_arr);
+void print_month_statistics(unsigned long n_rec, t_record a [], int month, t_record_vect month_vect []) {
+    if(month_vect[month].vect) {
+        int t_average = t_average_mount(n_rec, a, month, month_vect);
+        int t_min = t_min_month(n_rec, a, month, month_vect);
+        int t_max = t_max_month(n_rec, a, month, month_vect);
 
-        printf("average temperature in month %d is %d degrees C\n", month, t_average);
-        printf("minimal temperature in month %d is %d degrees C\n", month, t_min);
-        printf("maximal temperature in month %d is %d degrees C\n", month, t_max);
+        printf("Month  Average  Minimal  Maximal\n");
+        printf("%3d      %3d      %3d      %3d\n", month, t_average, t_min, t_max);
     }
     else
         printf("There are no data for month %d", month);
 }
 
-void print_year_statistics(unsigned long n_rec, t_record a []) {
+void print_year_statistics(unsigned long n_rec, t_record a [], t_record_vect month_vect []) {
+    printf("Month  Average  Minimal  Maximal\n");
+    for(int i = 0; i < 12; i++)
+        if(month_vect[i].vect) {
+            int t_average = t_average_mount(n_rec, a, i, month_vect);
+            int t_min = t_min_month(n_rec, a, i, month_vect);
+            int t_max = t_max_month(n_rec, a, i, month_vect);
+            printf("%3d\t%3d\t %3d\t  %3d\n", i, t_average, t_min, t_max);
+        }
+
     int t_average = t_average_year(n_rec, a);
     int t_min = t_min_year(n_rec, a);
     int t_max = t_max_year(n_rec, a);

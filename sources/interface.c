@@ -32,7 +32,7 @@ args_res read_args(int argc, char* argv []) {
                 break;
         }
     }
-    // checking correct args
+
     if(err_c) {
         out.stat = err;
         return out;
