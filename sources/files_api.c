@@ -27,7 +27,26 @@ int n_records_in_csv(char in []) {
     return size;
 }
 
-unsigned long read_file_csv(char in [], t_record a [], t_record* month_p []) {
+void calc_n_rect_in_every_month(unsigned long n_rec, t_record a [], t_record_vect month_p_arr []) {
+    for(int i = 0; i < 12; i++) {
+        if(month_p_arr[i].vect && i < 11) {
+            int j;
+
+            for(j = i + 1; j < 12 && !month_p_arr[j].vect; j++) { }
+
+            if(j < 12 && month_p_arr[j].vect)
+                month_p_arr[i].n = month_p_arr[j].vect - month_p_arr[i].vect;
+            else
+                month_p_arr[i].n = n_rec - (month_p_arr[i].vect - a);
+        }
+        else if(month_p_arr[i].vect)
+            month_p_arr[i].n = n_rec - (month_p_arr[i].vect - a);
+        else
+            month_p_arr[i].n = 0;
+    }
+}
+
+unsigned long read_file_csv(char in [], t_record a [], t_record_vect month_vect []) {
 
     char s[30];
     t_record temp;
@@ -42,8 +61,8 @@ unsigned long read_file_csv(char in [], t_record a [], t_record* month_p []) {
         n_correct = sscanf(s, "%hu;%hhu;%hhu;%hhu;%hhu;%hhd", &(temp.year), &(temp.month), &(temp.day), &(temp.hour), &(temp.minute), &(temp.temp));
 
         if(n_correct == 6 && (temp.month > 0 && temp.month < 13)) {
-            if(!month_p[temp.month - 1]) {
-                month_p[temp.month - 1] = a + n_records;
+            if(!month_vect[temp.month - 1].vect) {
+                month_vect[temp.month - 1].vect = a + n_records;
             }
             a[n_records++] = temp;
         }
@@ -53,17 +72,19 @@ unsigned long read_file_csv(char in [], t_record a [], t_record* month_p []) {
 
     fclose(f);
 
+    calc_n_rect_in_every_month(n_records, a, month_vect);
+
     return n_records;
 }
 
-t_record_vect get_vect_from_file_csv(char in [], t_record* month_p []) {
+t_record_vect get_vect_from_file_csv(char in [], t_record_vect month_vect []) {
     t_record_vect out;
 
     unsigned long max_size = n_records_in_csv(in);
 
     out.vect = malloc(sizeof(t_record) * max_size);
 
-    out.n = read_file_csv(in, out.vect, month_p);
+    out.n = read_file_csv(in, out.vect, month_vect);
 
     return out;
 }
