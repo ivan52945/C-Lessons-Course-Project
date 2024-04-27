@@ -1,6 +1,6 @@
 TARGET = course-project
 
-FLAGS = -Wall
+FLAGS = -Wall -std=c99
 
 RELEASE_PREF = release
 SRC_PREF = sources
