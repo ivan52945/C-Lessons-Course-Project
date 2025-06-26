@@ -57,10 +57,10 @@ unsigned long n_records_in_csv(char in[])
  * @brief Calculates record counts per month in a temperature dataset
  *
  * Computes the number of temperature records for each month (0-11) by analyzing
- * memory offsets between sorted monthly data vectors. Handles edge cases for:
- * - Empty months (n=0)
- * - Final month records
- * - Gaps between months
+ * memory offsets between sorted monthly data vectors. Handles edge cases for:  \n
+ * - Empty months (n=0)                                                         \n
+ * - Final month records                                                        \n
+ * - Gaps between months                                                        \n
  *
  * @param[in] n_rec Total number of records in array 'a'
  * @param[in] a Base array of all temperature records
@@ -91,11 +91,11 @@ void calc_n_rect_in_every_month(unsigned long n_rec, t_record_t a[], t_record_ve
 /**
  * @brief Reads and parses temperature data from CSV file
  *
- * Processes a CSV file containing temperature records with format:
- * `YYYY;MM;DD;hh;mm;T` where:
- * - Fields are semicolon-delimited
- * - Temperature (T) is signed byte (-128 to +127)
- * - Month (MM) must be 1-12
+ * Processes a CSV file containing temperature records with format: \n
+ * `YYYY;MM;DD;hh;mm;T` where:                                      \n
+ * - Fields are semicolon-delimited                                 \n
+ * - Temperature (T) is signed byte (-128 to +127)                  \n
+ * - Month (MM) must be 1-12                                        \n
  *
  * @param[in] in Path to input CSV file
  * @param[out] a Array to store valid records (pre-allocated)
@@ -140,19 +140,19 @@ unsigned long read_file_csv(char in[], t_record_t a[], t_record_vect_t month_vec
 /**
  * @brief Creates and initializes a temperature record vector from CSV file
  *
- * Provides complete initialization of a t_record_vect_t by:
- * - Estimating storage needs based on file size
- * - Allocating exact required memory
- * - Loading and validating all records
- * - Building month index vectors
+ * Provides complete initialization of a t_record_vect_t by:    \n
+ * - Estimating storage needs based on file size                \n
+ * - Allocating exact required memory                           \n
+ * - Loading and validating all records                         \n
+ * - Building month index vectors                               \n
  *
  * @param[in] in Path to the input CSV file (null-terminated string)
  * @param[out] month_vect Array of month vectors (length 12) for storing monthly data references
  * @return Initialized t_record_vect_t containing loaded records
  *
- * @throw Terminates program on:
- * - Memory allocation failure (exit code 1)
- * - File errors (via open_file())
+ * @throw Terminates program on:                                \n
+ * - Memory allocation failure (exit code 1)                    \n
+ * - File errors (via open_file())                              \n
  *
  * @post Caller must free out.vect when no longer needed
  * @see n_records_in_csv() Used for size estimation
