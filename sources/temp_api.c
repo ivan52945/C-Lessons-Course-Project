@@ -68,8 +68,6 @@ char t_max(unsigned long n_rec, t_record_t a[])
 /**
  * @brief Calculates average temperature for specified month
  *
- * @param n_rec Total number of records (unused, kept for interface consistency)
- * @param a Complete records array (unused)
  * @param month Target month (1-12, where 1=January)
  * @param month_vect Pre-calculated month index vectors
  * @return Average temperature in °C (rounded), -120 if no data for month
@@ -77,7 +75,7 @@ char t_max(unsigned long n_rec, t_record_t a[])
  * @note Returns -120 (error code) when month has no records
  * @see t_average() Called for actual calculation
  */
-char t_average_mount(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t month_vect[])
+char t_average_mount(int month, t_record_vect_t month_vect[])
 {
     t_record_vect_t mnt_s = month_vect[month - 1];
 
@@ -90,8 +88,6 @@ char t_average_mount(unsigned long n_rec, t_record_t a[], int month, t_record_ve
 /**
  * @brief Finds minimum temperature for specified month
  *
- * @param n_rec Total record count (unused)
- * @param a Full dataset (unused)
  * @param month Target month (1-12)
  * @param month_vect Month index structure
  * @return Lowest temperature in °C, -120 if no data
@@ -99,7 +95,7 @@ char t_average_mount(unsigned long n_rec, t_record_t a[], int month, t_record_ve
  * @warning Month must be 1-12 (no validation)
  * @see t_min() Called for actual calculation
  */
-char t_min_month(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t month_vect[])
+char t_min_month(int month, t_record_vect_t month_vect[])
 {
     t_record_vect_t mnt_s = month_vect[month - 1];
 
@@ -112,8 +108,6 @@ char t_min_month(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t
 /**
  * @brief Finds maximum temperature for specified month
  *
- * @param n_rec Total records (unused)
- * @param a All records (unused)
  * @param month Target month (1-12)
  * @param month_vect Month index data
  * @return Highest temperature in °C, -120 if no data
@@ -121,7 +115,7 @@ char t_min_month(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t
  * @note Consistent error code (-120) with other month functions
  * @see t_max() Called for core logic
  */
-char t_max_month(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t month_vect[])
+char t_max_month(int month, t_record_vect_t month_vect[])
 {
     t_record_vect_t mnt_s = month_vect[month - 1];
 
@@ -132,74 +126,75 @@ char t_max_month(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t
 }
 
 /**
- * @brief Calculates yearly average temperature
+ * @brief Calculates average temperature for yearly data
  *
- * Wrapper for t_average() that provides consistent yearly statistics interface.
+ * Wrapper that computes arithmetic mean temperature
+ * from pre-aggregated yearly records.
  *
- * @param n_rec Number of valid temperature records
- * @param a Array of temperature records
- * @return Average annual temperature in °C (rounded), -120 if no records
+ * @param year_vect Yearly data container with records
+ * @return Average temperature in °C (rounded), -120 if no data
+ *
+ * @note Simply delegates to t_average() function
+ * @see t_average() Actual calculation implementation
  */
-char t_average_year(unsigned long n_rec, t_record_t a[])
+char t_average_year(t_record_vect_t year_vect)
 {
-    return t_average(n_rec, a);
+    return t_average(year_vect.n, year_vect.vect);
 }
 
 /**
- * @brief Finds yearly minimum temperature
+ * @brief Finds minimum temperature in yearly data
  *
- * Wrapper for t_min() providing consistent yearly statistics interface.
+ * Wrapper that determines coldest temperature
+ * from pre-aggregated yearly records.
  *
- * @param n_rec Number of valid records
- * @param a Array of temperature records
- * @return Coldest temperature in °C, 120 if no records
+ * @param year_vect Yearly data container with records
+ * @return Minimum temperature in °C, 120 if no data
  *
- * @note Directly calls t_min() with same parameters
- * @see t_min() Core minimum calculation function
+ * @note Delegates to t_min() function
+ * @see t_min() Core minimum calculation
  */
-char t_min_year(unsigned long n_rec, t_record_t a[])
+char t_min_year(t_record_vect_t year_vect)
 {
-    return t_min(n_rec, a);
+    return t_min(year_vect.n, year_vect.vect);
 }
 
 /**
- * @brief Finds yearly maximum temperature
+ * @brief Finds maximum temperature in yearly data
  *
- * Wrapper for t_max() providing consistent yearly statistics interface.
+ * Wrapper that determines hottest temperature
+ * from pre-aggregated yearly records.
  *
- * @param n_rec Number of valid records
- * @param a Array of temperature records
- * @return Hottest temperature in °C, -120 if no records
+ * @param year_vect Yearly data container with records
+ * @return Maximum temperature in °C, -120 if no data
  *
- * @note Directly calls t_max() with same parameters
- * @see t_max() Core maximum calculation function
+ * @note Delegates to t_max() function
+ * @see t_max() Core maximum calculation
  */
-char t_max_year(unsigned long n_rec, t_record_t a[])
+char t_max_year(t_record_vect_t year_vect)
 {
-    return t_max(n_rec, a);
+    return t_max(year_vect.n, year_vect.vect);
 }
 
 /**
- * @brief Prints formatted monthly temperature statistics
+ * @brief Prints temperature statistics for specified month
  *
- * Displays table with calculated average, minimum and maximum temperatures
- * for specified month. Only shows data if month exists in records.
+ * Displays formatted table with calculated average, minimum
+ * and maximum temperatures for given month.
  *
- * @param n_rec Total number of records (passed to calculation functions)
- * @param a Complete array of temperature records
  * @param month Target month (1-12)
- * @param month_vect Pre-built month index vectors
+ * @param month_vect Array of monthly data vectors
  *
- * @note Uses t_average_month(), t_min_month(), t_max_month()
+ * @note Only prints data if records exist for the month
  * @warning Month parameter must be 1-12 (no validation)
- * @see print_year_statistics() For annual report version
+ * @see print_year_statistics() For annual report
  */
-void print_month_statistics(unsigned long n_rec, t_record_t a[], int month, t_record_vect_t month_vect[])
+void print_month_statistics(int month, t_record_vect_t month_vect[])
 {
     if (month_vect[month].vect) {
-        int t_average = t_average_mount(n_rec, a, month, month_vect);
-        int t_min = t_min_month(n_rec, a, month, month_vect);
-        int t_max = t_max_month(n_rec, a, month, month_vect);
+        int t_average = t_average_mount(month, month_vect);
+        int t_min = t_min_month(month, month_vect);
+        int t_max = t_max_month(month, month_vect);
 
         printf("Month  Average  Minimal  Maximal\n");
         printf("%3d      %3d      %3d      %3d\n", month, t_average, t_min, t_max);
@@ -209,33 +204,35 @@ void print_month_statistics(unsigned long n_rec, t_record_t a[], int month, t_re
 }
 
 /**
- * @brief Prints comprehensive annual temperature report
+ * @brief Prints complete yearly temperature report
  *
  * Generates:
  * 1. Monthly statistics table (all months with data)
- * 2. Yearly aggregate statistics (average/min/max)
+ * 2. Summary section with yearly aggregates
  *
- * @param n_rec Total valid records count
- * @param a Array of all temperature records
- * @param month_vect Month index vectors (length 12)
+ * @param year_vect Container with yearly temperature data
+ * @param month_vect Array of monthly data vectors
  *
- * @note Uses both monthly and yearly calculation functions
- * @warning month_vect must be properly initialized
+ * @note Uses t_average_year(), t_min_year(), t_max_year()
+ * @code
+ * // Usage:
+ * print_year_statistics(year_data, month_index);
+ * @endcode
  */
-void print_year_statistics(unsigned long n_rec, t_record_t a[], t_record_vect_t month_vect[])
+void print_year_statistics(t_record_vect_t year_vect, t_record_vect_t month_vect[])
 {
     printf("Month  Average  Minimal  Maximal\n");
     for (int i = 1; i <= 12; i++)
         if (month_vect[i].vect) {
-            int t_average = t_average_mount(n_rec, a, i, month_vect);
-            int t_min = t_min_month(n_rec, a, i, month_vect);
-            int t_max = t_max_month(n_rec, a, i, month_vect);
+            int t_average = t_average_mount(i, month_vect);
+            int t_min = t_min_month(i, month_vect);
+            int t_max = t_max_month(i, month_vect);
             printf("%3d\t%3d\t %3d\t  %3d\n", i, t_average, t_min, t_max);
         }
 
-    int t_average = t_average_year(n_rec, a);
-    int t_min = t_min_year(n_rec, a);
-    int t_max = t_max_year(n_rec, a);
+    int t_average = t_average_year(year_vect);
+    int t_min = t_min_year(year_vect);
+    int t_max = t_max_year(year_vect);
 
     printf("average temperature in year is %d degrees C\n", t_average);
     printf("minimal temperature in year is %d degrees C\n", t_min);
