@@ -8,23 +8,23 @@
 /**
  * @brief Parses command-line arguments and returns processing results.
  *
- * This function uses getopt() to parse command-line options in format:
- *   - -h       : show help
- *   - -f <path>: specify file path (required for calculations)
- *   - -m <num> : specify month (1-12, requires -f)
+ * This function uses getopt() to parse command-line options in format: \n
+ *   - -h       : show help                                             \n
+ *   - -f <path>: specify file path (required for calculations)         \n
+ *   - -m <num> : specify month (1-12, requires -f)                     \n
  *
  * @param argc Argument count (from main())
  * @param argv Argument values (from main())
- * @return args_res_t Structure containing:
- *         - month: parsed month (0 if not specified)
- *         - path:  file path (if -f specified)
- *         - stat:  processing status (err/clc/help)
+ * @return args_res_t Structure containing:                             \n
+ *         - month: parsed month (0 if not specified)                   \n
+ *         - path:  file path (if -f specified)                         \n
+ *         - stat:  processing status (err/clc/help)                    \n
  *
  * @note Validation rules:
- *       - -h cannot be combined with other options
- *       - -m requires -f
- *       - month must be 1-12
- *       - -f is mandatory for calculations
+ *       - -h cannot be combined with other options                     \n
+ *       - -m requires -f                                               \n
+ *       - month must be 1-12                                           \n
+ *       - -f is mandatory for calculations                             \n
  */
 args_res_t read_args(int argc, char* argv [])
 {

@@ -206,18 +206,14 @@ void print_month_statistics(int month, t_record_vect_t month_vect[])
 /**
  * @brief Prints complete yearly temperature report
  *
- * Generates:
- * 1. Monthly statistics table (all months with data)
- * 2. Summary section with yearly aggregates
+ * Generates:                                               \n
+ * 1. Monthly statistics table (all months with data)       \n
+ * 2. Summary section with yearly aggregates                \n
  *
  * @param year_vect Container with yearly temperature data
  * @param month_vect Array of monthly data vectors
  *
  * @note Uses t_average_year(), t_min_year(), t_max_year()
- * @code
- * // Usage:
- * print_year_statistics(year_data, month_index);
- * @endcode
  */
 void print_year_statistics(t_record_vect_t year_vect, t_record_vect_t month_vect[])
 {
