@@ -1,6 +1,6 @@
-TARGET = course-project
+TARGET = temp-statistics
 
-FLAGS = -Wall -std=c99
+FLAGS = -Wall -std=c99 -Iheaders
 
 RELEASE_PREF = release
 SRC_PREF = sources
